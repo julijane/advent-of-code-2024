@@ -6,40 +6,20 @@ import (
 	"github.com/julijane/advent-of-code-2024/aoc"
 )
 
-func getCols(input *aoc.Input) ([]int, []int) {
-	col1 := []int{}
-	col2 := []int{}
-
-	for _, line := range input.Lines {
-		numbers := aoc.ExtractNumbers(line.Data)
-
-		col1 = append(col1, numbers[0])
-		col2 = append(col2, numbers[1])
-	}
-
-	return col1, col2
-}
-
-func part1(input *aoc.Input) int {
+func part1(col1, col2 []int) int {
 	sum := 0
-	col1, col2 := getCols(input)
 
 	slices.Sort(col1)
 	slices.Sort(col2)
 
 	for i := 0; i < len(col1); i++ {
-		if col1[i] > col2[i] {
-			sum += col1[i] - col2[i]
-		} else {
-			sum += col2[i] - col1[i]
-		}
+		sum += aoc.AbsInt(col1[i] - col2[i])
 	}
 	return sum
 }
 
-func part2(input *aoc.Input) int {
+func part2(col1, col2 []int) int {
 	sum := 0
-	col1, col2 := getCols(input)
 
 	for _, col1num := range col1 {
 		numfound := 0
@@ -54,19 +34,18 @@ func part2(input *aoc.Input) int {
 	return sum
 }
 
-func calc(input *aoc.Input, runPart1, runPart2 bool) (int, int) {
-	sumPart1 := 0
-	sumPart2 := 0
+func calc(input *aoc.Input, _, _ bool) (int, int) {
+	col1 := []int{}
+	col2 := []int{}
 
-	if runPart1 {
-		sumPart1 = part1(input)
+	for _, line := range input.Lines {
+		numbers := aoc.ExtractNumbers(line.Data)
+
+		col1 = append(col1, numbers[0])
+		col2 = append(col2, numbers[1])
 	}
 
-	if runPart2 {
-		sumPart2 = part2(input)
-	}
-
-	return sumPart1, sumPart2
+	return part1(col1, col2), part2(col1, col2)
 }
 
 func main() {
