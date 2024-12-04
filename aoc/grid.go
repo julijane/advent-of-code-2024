@@ -96,3 +96,15 @@ func (g *Grid) FindConnectedFrom(startPos Coordinate, foundBefore Coordinates, s
 
 	return &found
 }
+
+func (g *Grid) StringFrom(startPos Coordinate, direction Coordinate, length int, outSideVal byte) string {
+	var res string
+
+	pos := startPos
+	for i := 0; i < length; i++ {
+		res += string(g.Get(pos, outSideVal))
+		pos = pos.Add(direction)
+	}
+
+	return res
+}
