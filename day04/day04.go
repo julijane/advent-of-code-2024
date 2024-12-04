@@ -4,21 +4,10 @@ import (
 	"github.com/julijane/advent-of-code-2024/aoc"
 )
 
-var directions = []aoc.Coordinate{
-	{X: -1, Y: 0},
-	{X: -1, Y: -1},
-	{X: 0, Y: -1},
-	{X: 1, Y: -1},
-	{X: 1, Y: 0},
-	{X: 1, Y: 1},
-	{X: 0, Y: 1},
-	{X: -1, Y: 1},
-}
-
 func checkForStartPosPart1(grid *aoc.Grid, pos aoc.Coordinate) int {
 	sum := 0
 
-	for _, direction := range directions {
+	for _, direction := range aoc.DirsAll {
 		if grid.StringFrom(pos, direction, 4, '.') == "XMAS" {
 			sum++
 		}
@@ -28,11 +17,11 @@ func checkForStartPosPart1(grid *aoc.Grid, pos aoc.Coordinate) int {
 }
 
 func checkForStartPosPart2(grid *aoc.Grid, pos aoc.Coordinate) int {
-	stringAL2BR := grid.StringFrom(pos.UpLeft(), aoc.DirDR, 3, '.')
-	stringAR2BL := grid.StringFrom(pos.UpRight(), aoc.DirDL, 3, '.')
+	stringUL2DR := grid.StringFrom(pos.UpLeft(), aoc.DirDR, 3, '.')
+	stringUR2DL := grid.StringFrom(pos.UpRight(), aoc.DirDL, 3, '.')
 
-	if (stringAL2BR == "MAS" || stringAL2BR == "SAM") &&
-		(stringAR2BL == "MAS" || stringAR2BL == "SAM") {
+	if (stringUL2DR == "MAS" || stringUL2DR == "SAM") &&
+		(stringUR2DL == "MAS" || stringUR2DL == "SAM") {
 		return 1
 	}
 
