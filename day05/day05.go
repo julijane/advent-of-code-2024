@@ -6,47 +6,29 @@ import (
 	"github.com/julijane/advent-of-code-2024/aoc"
 )
 
-type (
-	PageList      []int
-	Updates       []PageList
-	Rule          []int
-	OrderingRules []Rule
-)
+func isCorrectOrder(rules [][]int, pageList []int) bool {
+	for _, rule := range rules {
+		posFirstPage := slices.Index(pageList, rule[0])
+		posSecondPage := slices.Index(pageList, rule[1])
 
-func isCorrectOrder(rules OrderingRules, pageList PageList) bool {
-	for i := 1; i < len(pageList); i++ {
-		page := pageList[i]
-
-		for _, rule := range rules {
-			if rule[0] != page {
-				continue
-			}
-
-			posSecondPage := slices.Index(pageList, rule[1])
-			if posSecondPage != -1 && posSecondPage < i {
-				return false
-			}
+		if posFirstPage != -1 && posSecondPage != -1 && posFirstPage > posSecondPage {
+			return false
 		}
 	}
-
 	return true
 }
 
-func doReorder(rules OrderingRules, pageList PageList) {
-	for !isCorrectOrder(rules, pageList) {
+func doReorder(rules [][]int, pageList []int) {
+	slices.SortFunc(pageList, func(i, j int) int {
 		for _, rule := range rules {
-			posFirstPage := slices.Index(pageList, rule[0])
-			posSecondPage := slices.Index(pageList, rule[1])
-
-			if posFirstPage == -1 || posSecondPage == -1 {
-				continue
-			}
-
-			if posSecondPage < posFirstPage {
-				pageList[posFirstPage], pageList[posSecondPage] = pageList[posSecondPage], pageList[posFirstPage]
+			if rule[0] == i && rule[1] == j {
+				return -1
+			} else if rule[0] == j && rule[1] == i {
+				return 1
 			}
 		}
-	}
+		return 0
+	})
 }
 
 func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
@@ -55,21 +37,14 @@ func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
 
 	blocks := input.TextBlocks()
 
-	orderingRules := OrderingRules{}
+	orderingRules := make([][]int, 0)
 	for _, line := range blocks[0] {
-		orderingRules = append(orderingRules,
-			aoc.ExtractNumbers(line),
-		)
+		orderingRules = append(orderingRules, aoc.ExtractNumbers(line))
 	}
 
-	updates := Updates{}
 	for _, line := range blocks[1] {
-		updates = append(updates,
-			aoc.ExtractNumbers(line),
-		)
-	}
+		update := aoc.ExtractNumbers(line)
 
-	for _, update := range updates {
 		if isCorrectOrder(orderingRules, update) {
 			sumPart1 += update[len(update)/2]
 		} else {
