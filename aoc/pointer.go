@@ -11,6 +11,10 @@ func (p *Pointer) Move() {
 	p.C = p.C.Move(p.Dir)
 }
 
+func (p *Pointer) PeekMove() Coordinate {
+	return p.C.Move(p.Dir)
+}
+
 func (p *Pointer) TurnRight() {
 	p.Dir = (p.Dir + 1) % 4
 }
