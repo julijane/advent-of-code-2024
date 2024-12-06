@@ -7,7 +7,7 @@ import (
 // doWalk walks the grid, returns if it ended up in a loop.
 // If not, it also returns the visited positions (without the startpos)
 // An additional obstacle position can be passed to the function
-func doWalk(grid *aoc.Grid, additionalObstacle aoc.Coordinate) (bool, []aoc.Coordinate) {
+func doWalk(grid *aoc.Grid, additionalObstacle aoc.Coordinate, wantVisited bool) (bool, []aoc.Coordinate) {
 	startPos := grid.Find('^')
 
 	curPointer := aoc.NewPointer(startPos.X, startPos.Y, 0)
@@ -29,6 +29,11 @@ func doWalk(grid *aoc.Grid, additionalObstacle aoc.Coordinate) (bool, []aoc.Coor
 			curPointer.Move()
 			currentContent = nextContent
 		}
+	}
+
+	// For part2 we don't need the visited list, so we allow to signal to skip creating it
+	if !wantVisited {
+		return false, nil
 	}
 
 	// First create a map of visited positions without direction
@@ -57,14 +62,14 @@ func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
 
 	// Part1
 	// We just need to walk until we exit the grid and count the visited positions
-	_, visited := doWalk(grid, aoc.Coordinate{X: -2, Y: 0})
+	_, visited := doWalk(grid, aoc.Coordinate{X: -2, Y: 0}, true)
 	sumPart1 := len(visited) + 1
 
 	// Part2
 	// We can only set one obstacle at a time, so we only need to test the positions
 	// visited in Part1 as potential obstacle positions
 	for _, additionalObstaclePos := range visited {
-		if loop, _ := doWalk(grid, additionalObstaclePos); loop {
+		if loop, _ := doWalk(grid, additionalObstaclePos, false); loop {
 			sumPart2++
 		}
 	}
