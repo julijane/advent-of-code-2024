@@ -84,7 +84,7 @@ func checkWithRecursion(targetSum int, numbers []int, canBePart1 bool) (bool, bo
 	}
 
 	maxValue := 1
-	for lastNumber/maxValue > 0 {
+	for lastNumber > maxValue {
 		maxValue *= 10
 	}
 
