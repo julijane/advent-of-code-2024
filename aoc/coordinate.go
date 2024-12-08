@@ -30,6 +30,13 @@ func (c Coordinate) Add(other Coordinate) Coordinate {
 	}
 }
 
+func (c Coordinate) Subtract(other Coordinate) Coordinate {
+	return Coordinate{
+		X: c.X - other.X,
+		Y: c.Y - other.Y,
+	}
+}
+
 func (c Coordinate) AddXY(x, y int) Coordinate {
 	return Coordinate{
 		X: c.X + x,
