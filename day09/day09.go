@@ -1,72 +1,18 @@
 package main
 
 import (
+	"slices"
+
 	"github.com/julijane/advent-of-code-2024/aoc"
 )
 
-func calcPart1(line string) int {
-	fileblocks := []int{}
-	gaps := []int{}
-
-	for fileid, pos, i := 0, 0, 0; i < len(line); i, fileid = i+2, fileid+1 {
-		lengthFile := int(line[i] - '0')
-
-		for j := 0; j < lengthFile; j++ {
-			fileblocks = append(fileblocks, fileid)
-		}
-		pos += lengthFile
-
-		if i < len(line)-1 {
-			lengthGap := int(line[i+1] - '0')
-			if lengthGap >= 0 {
-				for j := 0; j < lengthGap; j, pos = j+1, pos+1 {
-					gaps = append(gaps, pos)
-				}
-			}
-		}
-	}
-
-	for _, gapPos := range gaps {
-		if gapPos > len(fileblocks) {
-			break
-		}
-		fileId := fileblocks[len(fileblocks)-1]
-		for pos := len(fileblocks) - 1; pos > gapPos; pos-- {
-			fileblocks[pos] = fileblocks[pos-1]
-		}
-		fileblocks[gapPos] = fileId
-	}
-
-	sum := 0
-	for pos, fileid := range fileblocks {
-		sum += pos * fileid
-	}
-
-	return sum
-}
-
-type File struct {
-	ID     int
+type FileBlocks struct {
+	FileID int
 	Pos    int
 	Length int
 }
 
-func calcPart2(line string) int {
-	files := []File{}
-	gaps := []File{}
-
-	for fileid, pos, i := 0, 0, 0; i < len(line); i, fileid = i+2, fileid+1 {
-		lengthFile := int(line[i] - '0')
-		files = append(files, File{ID: fileid, Pos: pos, Length: lengthFile})
-		pos += lengthFile
-
-		if i < len(line)-1 {
-			lengthGap := int(line[i+1] - '0')
-			gaps = append(gaps, File{ID: -1, Pos: pos, Length: lengthGap})
-			pos += lengthGap
-		}
-	}
-
+func defrag(files []FileBlocks, gaps []FileBlocks) int {
 	for i := len(files) - 1; i >= 0; i-- {
 		if len(gaps) == 0 {
 			break
@@ -93,7 +39,7 @@ func calcPart2(line string) int {
 	sum := 0
 	for _, file := range files {
 		for pos := file.Pos; pos < file.Pos+file.Length; pos++ {
-			sum += pos * file.ID
+			sum += pos * file.FileID
 		}
 	}
 
@@ -103,7 +49,35 @@ func calcPart2(line string) int {
 func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
 	line := input.PlainLines()[0]
 
-	return calcPart1(line), calcPart2(line)
+	gapsPart2 := []FileBlocks{}
+	filesPart2 := []FileBlocks{}
+
+	for fileid, pos, i := 0, 0, 0; i < len(line); i, fileid = i+2, fileid+1 {
+		lengthFile := int(line[i] - '0')
+		filesPart2 = append(filesPart2, FileBlocks{FileID: fileid, Pos: pos, Length: lengthFile})
+		pos += lengthFile
+
+		if i < len(line)-1 {
+			lengthGap := int(line[i+1] - '0')
+			gapsPart2 = append(gapsPart2, FileBlocks{FileID: -1, Pos: pos, Length: lengthGap})
+			pos += lengthGap
+		}
+	}
+
+	// Part 1 is just a special case of Part 2 where we split the files into blocks of just 1 length
+
+	filesPart1 := []FileBlocks{}
+	gapsPart1 := slices.Clone(gapsPart2)
+
+	for _, file := range filesPart2 {
+		for j := 0; j < file.Length; j++ {
+			filesPart1 = append(filesPart1, FileBlocks{FileID: file.FileID, Pos: file.Pos + j, Length: 1})
+		}
+	}
+
+	//
+
+	return defrag(filesPart1, gapsPart1), defrag(filesPart2, gapsPart2)
 }
 
 func main() {
