@@ -2,57 +2,58 @@ package main
 
 import (
 	"slices"
-	"strconv"
 
 	"github.com/julijane/advent-of-code-2024/aoc"
 )
 
 type TrailInfo struct {
-	ReachableNines aoc.Coordinates
-	Rating         int
+	ReachableEndpoints aoc.Coordinates
+	Rating             int
 }
+
+type TrailByStartpos map[aoc.Coordinate]TrailInfo
+
+type TrailsByStartval map[byte]TrailByStartpos
 
 func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
 	grid := input.Grid()
 
-	trailsByStartval := make(map[int]map[aoc.Coordinate]TrailInfo)
-	trailsByStartval[9] = make(map[aoc.Coordinate]TrailInfo)
+	trailsByStartval := make(TrailsByStartval)
+	trailsByStartval['9'] = make(TrailByStartpos)
 
-	ninePos := grid.FindAll('9')
-	for _, pos := range ninePos {
-		trailsByStartval[9][pos] = TrailInfo{
-			ReachableNines: aoc.Coordinates{pos},
-			Rating:         1,
+	gridPositions := grid.FindMultipleAll("0123456789")
+
+	for _, pos := range gridPositions['9'] {
+		trailsByStartval['9'][pos] = TrailInfo{
+			ReachableEndpoints: aoc.Coordinates{pos},
+			Rating:             1,
 		}
 	}
 
-	for startVal := 8; startVal >= 0; startVal-- {
-		fieldVal := strconv.Itoa(startVal)[0]
-		fieldPos := grid.FindAll(fieldVal)
+	for startVal := byte('8'); startVal >= '0'; startVal-- {
+		trailsByStartval[startVal] = make(TrailByStartpos)
 
-		trailsByStartval[startVal] = make(map[aoc.Coordinate]TrailInfo)
-
-		for _, pos := range fieldPos {
-			reachable := aoc.Coordinates{}
-			posRating := 0
+		for _, pos := range gridPositions[startVal] {
+			reachableEndpoints := aoc.Coordinates{}
+			rating := 0
 
 			for _, dir := range aoc.DirsStraight {
 				adjacentPos := pos.Add(dir)
 
 				if trails, ok := trailsByStartval[startVal+1][adjacentPos]; ok {
-					for _, trail := range trails.ReachableNines {
-						if !slices.Contains(reachable, trail) {
-							reachable = append(reachable, trail)
+					for _, trail := range trails.ReachableEndpoints {
+						if !slices.Contains(reachableEndpoints, trail) {
+							reachableEndpoints = append(reachableEndpoints, trail)
 						}
 					}
 
-					posRating += trails.Rating
+					rating += trails.Rating
 				}
 			}
 
 			trailsByStartval[startVal][pos] = TrailInfo{
-				ReachableNines: reachable,
-				Rating:         posRating,
+				ReachableEndpoints: reachableEndpoints,
+				Rating:             rating,
 			}
 		}
 	}
@@ -60,8 +61,8 @@ func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
 	sumPart1 := 0
 	sumPart2 := 0
 
-	for _, trail := range trailsByStartval[0] {
-		sumPart1 += len(trail.ReachableNines)
+	for _, trail := range trailsByStartval['0'] {
+		sumPart1 += len(trail.ReachableEndpoints)
 		sumPart2 += trail.Rating
 	}
 

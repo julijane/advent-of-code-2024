@@ -1,5 +1,7 @@
 package aoc
 
+import "strings"
+
 type Grid struct {
 	Width  int
 	Height int
@@ -64,6 +66,25 @@ func (g *Grid) FindAll(search byte) Coordinates {
 		for x := 0; x < g.Width; x++ {
 			if g.Data[y][x] == search {
 				found = append(found, Coordinate{X: x, Y: y})
+			}
+		}
+	}
+
+	return found
+}
+
+func (g *Grid) FindMultipleAll(search string) map[byte]Coordinates {
+	found := make(map[byte]Coordinates)
+
+	for y := 0; y < g.Height; y++ {
+		for x := 0; x < g.Width; x++ {
+			content := g.Data[y][x]
+			if strings.Contains(search, string(content)) {
+				if _, ok := found[g.Data[y][x]]; !ok {
+					found[content] = Coordinates{}
+				}
+
+				found[g.Data[y][x]] = append(found[content], Coordinate{X: x, Y: y})
 			}
 		}
 	}
