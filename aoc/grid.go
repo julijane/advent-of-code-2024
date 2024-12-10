@@ -57,6 +57,20 @@ func (g *Grid) Find(search byte) Coordinate {
 	return Coordinate{X: -1, Y: -1}
 }
 
+func (g *Grid) FindAll(search byte) Coordinates {
+	found := Coordinates{}
+
+	for y := 0; y < g.Height; y++ {
+		for x := 0; x < g.Width; x++ {
+			if g.Data[y][x] == search {
+				found = append(found, Coordinate{X: x, Y: y})
+			}
+		}
+	}
+
+	return found
+}
+
 type GridMapFunction func(pos Coordinate, value byte) byte
 
 func (g *Grid) Map(fn GridMapFunction) {
