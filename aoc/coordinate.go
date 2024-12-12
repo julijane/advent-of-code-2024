@@ -16,7 +16,7 @@ var (
 
 	DirsStraight = []Coordinate{DirU, DirR, DirD, DirL}
 	DirsDiagonal = []Coordinate{DirUL, DirUR, DirDR, DirDL}
-	DirsAll      = []Coordinate{DirUL, DirU, DirUR, DirR, DirDR, DirD, DirDL, DirL}
+	DirsAll      = []Coordinate{DirU, DirUR, DirR, DirDR, DirD, DirDL, DirL, DirUL}
 )
 
 func (c Coordinate) Same(other Coordinate) bool {
