@@ -1,6 +1,9 @@
 package aoc
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 type Grid struct {
 	Width  int
@@ -19,6 +22,22 @@ func (i *Input) Grid() *Grid {
 	}
 
 	return grid
+}
+
+func NewGrid(width, height int, fill byte) *Grid {
+	data := make([][]byte, height)
+	for i := 0; i < height; i++ {
+		data[i] = make([]byte, width)
+		for j := 0; j < width; j++ {
+			data[i][j] = fill
+		}
+	}
+
+	return &Grid{
+		Width:  width,
+		Height: height,
+		Data:   data,
+	}
 }
 
 func (g *Grid) Inside(c Coordinate) bool {
@@ -142,4 +161,10 @@ func (g *Grid) StringFrom(startPos Coordinate, direction Coordinate, length int,
 	}
 
 	return res
+}
+
+func (g *Grid) Print() {
+	for y := 0; y < g.Height; y++ {
+		fmt.Println(string(g.Data[y]))
+	}
 }
