@@ -15,9 +15,9 @@ func doCalc(gridText []string, instructions []byte, isPart2 bool) int {
 		}
 	}
 
-	g := aoc.NewGridFromStrings(gridText)
+	grid := aoc.NewGridFromStrings(gridText)
 
-	robotPos := g.Find('@')
+	robotPos := grid.Find('@')
 
 instLoop:
 	for _, instruction := range instructions {
@@ -35,10 +35,10 @@ instLoop:
 				continue
 			}
 
-			currentFieldContent[nowToMove] = g.Get(nowToMove, '#')
+			currentFieldContent[nowToMove] = grid.Get(nowToMove, '#')
 
 			nextPos := nowToMove.Add(moveVal)
-			switch g.Get(nextPos, '#') {
+			switch grid.Get(nextPos, '#') {
 			case '#':
 				continue instLoop
 			case '[':
@@ -55,20 +55,20 @@ instLoop:
 		}
 
 		for pos := range currentFieldContent {
-			g.Set(pos, '.')
+			grid.Set(pos, '.')
 		}
 
 		for pos := range currentFieldContent {
-			g.Set(pos.Add(moveVal), currentFieldContent[pos])
+			grid.Set(pos.Add(moveVal), currentFieldContent[pos])
 		}
 
-		g.Set(robotPos, '.')
+		grid.Set(robotPos, '.')
 		robotPos = robotPos.Add(moveVal)
-		g.Set(robotPos, '@')
+		grid.Set(robotPos, '@')
 	}
 
 	result := 0
-	for _, multiplePos := range g.FindMultipleAll("O[") {
+	for _, multiplePos := range grid.FindMultipleAll("O[") {
 		for _, pos := range multiplePos {
 			result += 100*pos.Y + pos.X
 		}
@@ -81,21 +81,11 @@ func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
 	blocks := input.TextBlocks()
 
 	instructions := []byte{}
+	possibleInstruction := "^>v<"
+
 	for _, line := range blocks[1] {
 		for _, char := range line {
-			var dir byte
-			switch char {
-			case '^':
-				dir = 0
-			case '>':
-				dir = 1
-			case 'v':
-				dir = 2
-			case '<':
-				dir = 3
-			}
-
-			instructions = append(instructions, dir)
+			instructions = append(instructions, byte(strings.Index(possibleInstruction, string(char))))
 		}
 	}
 
