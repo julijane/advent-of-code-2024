@@ -40,6 +40,19 @@ func NewGrid(width, height int, fill byte) *Grid {
 	}
 }
 
+func NewGridFromStrings(data []string) *Grid {
+	grid := &Grid{
+		Width:  len(data[0]),
+		Height: len(data),
+	}
+
+	for _, line := range data {
+		grid.Data = append(grid.Data, []byte(line))
+	}
+
+	return grid
+}
+
 func (g *Grid) Inside(c Coordinate) bool {
 	return c.X >= 0 && c.X < g.Width && c.Y >= 0 && c.Y < g.Height
 }
