@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"slices"
 	"strconv"
@@ -23,37 +22,6 @@ const (
 	instBDV = 6
 	instCDV = 7
 )
-
-func comboOperandToString(operand int) string {
-	if operand <= 3 {
-		return strconv.Itoa(operand)
-	}
-
-	return string(rune('A' + operand - 4))
-}
-
-func instructionToString(opcode, operand int) string {
-	switch opcode {
-	case instADV:
-		return "ADV " + comboOperandToString(operand)
-	case instBXL:
-		return "BXL " + strconv.Itoa(operand)
-	case instBST:
-		return "BST " + comboOperandToString(operand)
-	case instJNZ:
-		return "JNZ " + strconv.Itoa(operand)
-	case instBXC:
-		return "BXC"
-	case instOUT:
-		return "OUT " + comboOperandToString(operand)
-	case instBDV:
-		return "BDV " + comboOperandToString(operand)
-	case instCDV:
-		return "CDV " + comboOperandToString(operand)
-	}
-
-	return "???"
-}
 
 type CPU struct {
 	registers [3]int
@@ -80,18 +48,6 @@ func NewCPU(input *aoc.Input) *CPU {
 	}
 }
 
-func (cpu *CPU) DumpProgram() {
-	for i := 0; i < len(cpu.program); i += 2 {
-		fmt.Println(instructionToString(cpu.program[i], cpu.program[i+1]))
-	}
-}
-
-func (cpu *CPU) PrintState() {
-	fmt.Printf("[%d] [a=%d b=%d c=%d] %s\n",
-		cpu.ip, cpu.registers[regA], cpu.registers[regB], cpu.registers[regC],
-		instructionToString(cpu.program[cpu.ip], cpu.program[cpu.ip+1]))
-}
-
 func (cpu *CPU) getComboParam(param int) int {
 	if param <= 3 {
 		return param
@@ -105,8 +61,6 @@ instloop:
 	for cpu.ip < len(cpu.program) {
 		opcode := cpu.program[cpu.ip]
 		param := cpu.program[cpu.ip+1]
-
-		// cpu.PrintState()
 
 		switch opcode {
 		case instADV:
@@ -137,6 +91,11 @@ instloop:
 	}
 
 	return cpu.output
+}
+
+type partialA struct {
+	partialA    int
+	numSections int
 }
 
 func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
@@ -190,17 +149,14 @@ func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 		// value of A found so far accordingly and try all possible values for the next section of A. Repeat
 		// until done.
 
-		toCheck := [][]int{{}}
+		// A queue of partial values of A. We need to
+		checkQueue := []partialA{{0, 0}}
 
-		for len(toCheck) > 0 {
+		for len(checkQueue) > 0 {
+			candidate := checkQueue[0]
+			checkQueue = checkQueue[1:]
 
-			startASections := toCheck[0]
-			toCheck = toCheck[1:]
-
-			startA := 0
-			for _, val := range startASections {
-				startA = (startA | val) << numABitsPerOutput
-			}
+			startA := candidate.partialA << numABitsPerOutput
 
 			// we check all possible values for the current section of A
 			for j := 0; j < maxValueForABits; j++ {
@@ -213,7 +169,7 @@ func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 
 				output := cpu.Run()
 
-				if len(output) != len(startASections)+1 {
+				if len(output) != candidate.numSections+1 {
 					// too short
 					continue
 				}
@@ -228,10 +184,7 @@ func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 						continue
 					}
 
-					newSections := slices.Clone(startASections)
-					newSections = append(newSections, j)
-
-					toCheck = append(toCheck, newSections)
+					checkQueue = append(checkQueue, partialA{startA | j, candidate.numSections + 1})
 				}
 			}
 		}
