@@ -51,7 +51,7 @@ lineLoop:
 	return sum
 }
 
-func calc(input *aoc.Input, _, _ bool) (int, int) {
+func calc(input *aoc.Input, _, _ bool) (any, any) {
 	return check(input, false), check(input, true)
 }
 

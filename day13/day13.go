@@ -28,7 +28,7 @@ func solveFor(aX, aY, bX, bY, pX, pY int) int {
 	return a*3 + b
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
+func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 	sumPart1 := 0
 	sumPart2 := 0
 

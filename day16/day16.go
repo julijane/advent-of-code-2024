@@ -43,7 +43,7 @@ func (pq *PriorityQueue) Pop() any {
 
 // ---
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
+func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 	sumPart1 := math.MaxInt64
 	sumPart2 := 0
 

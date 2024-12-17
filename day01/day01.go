@@ -34,7 +34,7 @@ func part2(col1, col2 []int) int {
 	return sum
 }
 
-func calc(input *aoc.Input, _, _ bool) (int, int) {
+func calc(input *aoc.Input, _, _ bool) (any, any) {
 	col1 := []int{}
 	col2 := []int{}
 

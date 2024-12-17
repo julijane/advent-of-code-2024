@@ -50,7 +50,7 @@ func calcForStoneAtLevel(stone StoneLevel, maxLevel int) int {
 	return result
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
+func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 	stones := aoc.ExtractNumbers(input.PlainLines()[0])
 
 	sumPart1 := 0

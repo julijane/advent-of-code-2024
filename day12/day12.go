@@ -43,7 +43,7 @@ func walkFrom(g *aoc.Grid, c aoc.Coordinate, fieldVal byte, walkedFields map[aoc
 	return sumFields, sumPerimeterLength, sumCorners
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
+func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 	sumPart1 := 0
 	sumPart2 := 0
 

@@ -21,7 +21,7 @@ func (r Robot) PositionAfter(seconds int) aoc.Coordinate {
 	}
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
+func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 	sumPart1 := 0
 	sumPart2 := 0
 

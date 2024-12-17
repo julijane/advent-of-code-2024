@@ -66,7 +66,7 @@ func doWalkPart2(grid *aoc.Grid, additionalObstacle, startPos aoc.Coordinate) bo
 	}
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
+func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 	sumPart2 := 0
 
 	grid := input.Grid()

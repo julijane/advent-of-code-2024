@@ -9,7 +9,7 @@ import (
 )
 
 // InputCalcFunction is the function signature for the calculation function
-type InputCalcFunction func(i *Input, runPart1, runpart2 bool) (int, int)
+type InputCalcFunction func(i *Input, runPart1, runpart2 bool) (any, any)
 
 // Run runs the given calcFunction on the given input file
 func Run(fileName string, calcFunction InputCalcFunction, runPart1, runPart2 bool) {
@@ -37,13 +37,13 @@ func Run(fileName string, calcFunction InputCalcFunction, runPart1, runPart2 boo
 
 	result := fileName + ":"
 	if runPart1 {
-		result += fmt.Sprintf(" part 1: %d", res1)
+		result += fmt.Sprintf(" part 1: %v", res1)
 	}
 	if runPart2 {
 		if runPart1 {
 			result += ", "
 		}
-		result += fmt.Sprintf(" part 2: %d", res2)
+		result += fmt.Sprintf(" part 2: %v", res2)
 	}
 
 	fmt.Println(result)

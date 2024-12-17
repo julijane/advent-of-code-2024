@@ -4,7 +4,7 @@ import (
 	"github.com/julijane/advent-of-code-2024/aoc"
 )
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (int, int) {
+func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
 	antennaLocations := make(map[byte][]aoc.Coordinate)
 
 	grid := input.Grid()
