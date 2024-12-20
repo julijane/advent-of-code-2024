@@ -77,7 +77,7 @@ instLoop:
 	return result
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
+func calc(input *aoc.Input, doPart1, doPart2 bool, _ ...any) (any, any) {
 	blocks := input.TextBlocks()
 
 	instructions := []byte{}

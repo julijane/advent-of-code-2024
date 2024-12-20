@@ -28,7 +28,7 @@ func checkForStartPosPart2(grid *aoc.Grid, pos aoc.Coordinate) int {
 	return 0
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
+func calc(input *aoc.Input, _, _ bool, _ ...any) (any, any) {
 	sumPart1 := 0
 	sumPart2 := 0
 

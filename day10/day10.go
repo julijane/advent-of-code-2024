@@ -15,7 +15,7 @@ type TrailByStartpos map[aoc.Coordinate]TrailInfo
 
 type TrailsByStartval map[byte]TrailByStartpos
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
+func calc(input *aoc.Input, _, _ bool, _ ...any) (any, any) {
 	grid := input.Grid()
 
 	trailsByStartval := make(TrailsByStartval)

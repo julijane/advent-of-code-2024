@@ -9,10 +9,10 @@ import (
 )
 
 // InputCalcFunction is the function signature for the calculation function
-type InputCalcFunction func(i *Input, runPart1, runpart2 bool) (any, any)
+type InputCalcFunction func(i *Input, runPart1, runpart2 bool, param ...any) (any, any)
 
 // Run runs the given calcFunction on the given input file
-func Run(fileName string, calcFunction InputCalcFunction, runPart1, runPart2 bool) {
+func Run(fileName string, calcFunction InputCalcFunction, runPart1, runPart2 bool, param ...any) {
 	_ = pp.Print // just to keep this module in the project
 
 	InputFile, err := os.Open(fileName)
@@ -33,7 +33,7 @@ func Run(fileName string, calcFunction InputCalcFunction, runPart1, runPart2 boo
 		lines = lines[:len(lines)-1]
 	}
 
-	res1, res2 := calcFunction(NewInput(lines), runPart1, runPart2)
+	res1, res2 := calcFunction(NewInput(lines), runPart1, runPart2, param)
 
 	result := fileName + ":"
 	if runPart1 {

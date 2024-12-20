@@ -32,7 +32,7 @@ func calcFor(code string, isPart2 bool) int {
 	return sum
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
+func calc(input *aoc.Input, doPart1, doPart2 bool, _ ...any) (any, any) {
 	sumPart1 := 0
 	sumPart2 := 0
 

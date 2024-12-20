@@ -46,7 +46,7 @@ func defrag(files []FileBlocks, gaps []FileBlocks) int {
 	return sum
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
+func calc(input *aoc.Input, _, _ bool, _ ...any) (any, any) {
 	line := input.PlainLines()[0]
 
 	gapsPart2 := []FileBlocks{}

@@ -98,7 +98,7 @@ func checkWithRecursion(targetSum int, numbers []int, canBePart1 bool) (bool, bo
 	return false, false
 }
 
-func calc(input *aoc.Input, doPart1, doPart2 bool) (any, any) {
+func calc(input *aoc.Input, _, _ bool, _ ...any) (any, any) {
 	sumPart1 := 0
 	sumPart2 := 0
 
